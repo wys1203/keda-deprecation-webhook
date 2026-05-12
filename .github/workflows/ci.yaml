@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: go vet ./...
+      - run: go test -race -coverprofile=coverage.out ./...
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.62.0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.out
+
+  chart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.0
+      - run: helm lint charts/keda-deprecation-webhook
+      - run: |
+          helm template kdw charts/keda-deprecation-webhook \
+            --namespace keda-system --set namespace.create=true \
+            --set dashboard.enabled=true \
+            > /tmp/rendered.yaml
+          test -s /tmp/rendered.yaml
+      - name: Verify chart dashboard matches repo-root dashboard
+        run: diff dashboard.json charts/keda-deprecation-webhook/dashboard.json
+
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: keda-deprecation-webhook:ci
