@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
 	"github.com/wys1203/keda-deprecation-webhook/internal/rules"
 )
 

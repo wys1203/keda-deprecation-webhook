@@ -3,8 +3,8 @@ package rules
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	kedav1alpha1 "github.com/kedacore/keda/v2/apis/keda/v1alpha1"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestKEDA001_CpuWithMetadataType_FlagsViolation(t *testing.T) {
