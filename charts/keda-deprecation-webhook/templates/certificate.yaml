@@ -1,0 +1,30 @@
+{{- $fullName := include "keda-deprecation-webhook.fullname" . -}}
+{{- if and (empty .Values.certificate.issuer.name) (empty .Values.certificate.issuer.kind) }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $fullName }}-selfsigned
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keda-deprecation-webhook.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+{{- end }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $fullName }}-serving-cert
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keda-deprecation-webhook.labels" . | nindent 4 }}
+spec:
+  secretName: {{ $fullName }}-tls
+  duration: {{ .Values.certificate.duration }}
+  renewBefore: {{ .Values.certificate.renewBefore }}
+  dnsNames:
+    - {{ $fullName }}.{{ .Release.Namespace }}.svc
+    - {{ $fullName }}.{{ .Release.Namespace }}.svc.cluster.local
+  issuerRef:
+    name: {{ default (printf "%s-selfsigned" $fullName) .Values.certificate.issuer.name }}
+    kind: {{ default "Issuer" .Values.certificate.issuer.kind }}

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "keda-deprecation-webhook.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keda-deprecation-webhook.labels" . | nindent 4 }}
+  {{- if .Values.service.prometheus.scrape }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.webhook.metricsPort }}"
+    prometheus.io/path: /metrics
+  {{- end }}
+spec:
+  selector:
+    {{- include "keda-deprecation-webhook.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: webhook
+      port: 443
+      targetPort: {{ .Values.webhook.port }}
+      protocol: TCP
+    - name: metrics
+      port: {{ .Values.webhook.metricsPort }}
+      targetPort: {{ .Values.webhook.metricsPort }}
+      protocol: TCP

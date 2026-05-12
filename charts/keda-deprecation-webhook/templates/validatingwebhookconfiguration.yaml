@@ -1,0 +1,26 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ include "keda-deprecation-webhook.fullname" . }}
+  labels:
+    {{- include "keda-deprecation-webhook.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "keda-deprecation-webhook.fullname" . }}-serving-cert
+webhooks:
+  - name: vkdw.keda.sh
+    failurePolicy: {{ .Values.webhook.failurePolicy }}
+    sideEffects: None
+    admissionReviewVersions: ["v1"]
+    timeoutSeconds: {{ .Values.webhook.timeoutSeconds }}
+    matchPolicy: Equivalent
+    rules:
+      - apiGroups: ["keda.sh"]
+        apiVersions: ["v1alpha1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["scaledobjects", "scaledjobs"]
+    clientConfig:
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ include "keda-deprecation-webhook.fullname" . }}
+        path: /validate-keda-sh-v1alpha1
+        port: 443
