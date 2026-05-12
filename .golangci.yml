@@ -1,6 +1,5 @@
 run:
   timeout: 5m
-  go: "1.25"
 
 linters:
   disable-all: true
@@ -9,11 +8,9 @@ linters:
     - govet
     - ineffassign
     - staticcheck
-    - unused
     - gofmt
     - goimports
     - misspell
-
-linters-settings:
-  goimports:
-    local-prefixes: github.com/wys1203/keda-deprecation-webhook
+  settings:
+    goimports:
+      local-prefixes: github.com/wys1203/keda-deprecation-webhook
