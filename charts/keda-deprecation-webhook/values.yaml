@@ -1,0 +1,68 @@
+# Default values for keda-deprecation-webhook.
+# Mirrors current kdw/manifests/deploy/* defaults so an out-of-the-box
+# install behaves like the previous lab vendoring.
+
+image:
+  repository: ghcr.io/wys1203/keda-deprecation-webhook
+  tag: ""              # defaults to .Chart.AppVersion
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+replicaCount: 2
+
+namespace:
+  create: false        # set true to have the chart create the install namespace
+
+serviceAccount:
+  create: true
+  name: ""             # defaults to fullname
+
+rbac:
+  create: true
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+webhook:
+  failurePolicy: Ignore   # matches current VWC
+  timeoutSeconds: 5
+  port: 9443
+  metricsPort: 8080
+  probesPort: 8081
+
+service:
+  prometheus:
+    scrape: true        # adds prometheus.io/scrape annotations
+
+pdb:
+  enabled: true
+  maxUnavailable: 1
+
+certificate:
+  duration: 8760h
+  renewBefore: 720h
+  # If using your own issuer instead of the self-signed one bundled here,
+  # set issuer.name + issuer.kind and the chart will skip its Issuer.
+  issuer:
+    name: ""
+    kind: ""
+
+# Deprecation rules consumed by the webhook config-map. Mirrors the
+# default-error / no-overrides shape; lab users add namespaceOverrides.
+rules:
+  - id: KEDA001
+    defaultSeverity: error
+    namespaceOverrides: []
+
+dashboard:
+  enabled: false       # set true to install the Grafana dashboard CM
+                       # (labeled grafana_dashboard=1 for sidecar pickup)
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
