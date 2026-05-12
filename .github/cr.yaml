@@ -1,0 +1,6 @@
+owner: wys1203
+git-repo: keda-deprecation-webhook
+package-path: .cr-release-packages
+index-path: index.yaml
+charts-repo: https://wys1203.github.io/keda-deprecation-webhook
+release-name-template: "chart-{{ .Version }}"
