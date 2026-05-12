@@ -14,9 +14,9 @@ import (
 
 	kedav1alpha1 "github.com/kedacore/keda/v2/apis/keda/v1alpha1"
 
-	"github.com/wys1203/keda-labs/kdw/internal/config"
-	"github.com/wys1203/keda-labs/kdw/internal/metrics"
-	"github.com/wys1203/keda-labs/kdw/internal/rules"
+	"github.com/wys1203/keda-deprecation-webhook/internal/config"
+	"github.com/wys1203/keda-deprecation-webhook/internal/metrics"
+	"github.com/wys1203/keda-deprecation-webhook/internal/rules"
 )
 
 type ScaledObjectReconciler struct {

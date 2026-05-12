@@ -5,7 +5,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/types"
 
-	"github.com/wys1203/keda-labs/kdw/internal/metrics"
+	"github.com/wys1203/keda-deprecation-webhook/internal/metrics"
 )
 
 // Emitter holds the source-of-truth for which gauge series are currently

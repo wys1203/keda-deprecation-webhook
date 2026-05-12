@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/wys1203/keda-labs/kdw/internal/rules"
+	"github.com/wys1203/keda-deprecation-webhook/internal/rules"
 )
 
 func TestParseYAML_ValidConfig(t *testing.T) {

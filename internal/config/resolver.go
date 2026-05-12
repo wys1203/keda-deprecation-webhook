@@ -1,6 +1,6 @@
 package config
 
-import "github.com/wys1203/keda-labs/kdw/internal/rules"
+import "github.com/wys1203/keda-deprecation-webhook/internal/rules"
 
 // EffectiveSeverity is called by both webhook handler and controller for
 // every (ruleID, namespace) pair. Behaviour MUST stay identical between

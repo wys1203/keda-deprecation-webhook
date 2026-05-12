@@ -1,4 +1,4 @@
-module github.com/wys1203/keda-labs/kdw
+module github.com/wys1203/keda-deprecation-webhook
 
 go 1.25.6
 

@@ -1,6 +1,6 @@
 package webhook
 
-import "github.com/wys1203/keda-labs/kdw/internal/rules"
+import "github.com/wys1203/keda-deprecation-webhook/internal/rules"
 
 // DiffByKey returns violations present in `new` whose key
 // (RuleID, TriggerType, Field) is not present in `old`.

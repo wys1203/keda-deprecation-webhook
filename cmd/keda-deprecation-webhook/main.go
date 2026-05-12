@@ -25,10 +25,10 @@ import (
 
 	kedav1alpha1 "github.com/kedacore/keda/v2/apis/keda/v1alpha1"
 
-	"github.com/wys1203/keda-labs/kdw/internal/config"
-	"github.com/wys1203/keda-labs/kdw/internal/controller"
-	"github.com/wys1203/keda-labs/kdw/internal/metrics"
-	whk "github.com/wys1203/keda-labs/kdw/internal/webhook"
+	"github.com/wys1203/keda-deprecation-webhook/internal/config"
+	"github.com/wys1203/keda-deprecation-webhook/internal/controller"
+	"github.com/wys1203/keda-deprecation-webhook/internal/metrics"
+	whk "github.com/wys1203/keda-deprecation-webhook/internal/webhook"
 )
 
 var scheme = runtime.NewScheme()

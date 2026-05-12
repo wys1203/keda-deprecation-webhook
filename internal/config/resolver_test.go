@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/wys1203/keda-labs/kdw/internal/rules"
+	"github.com/wys1203/keda-deprecation-webhook/internal/rules"
 )
 
 func TestEffectiveSeverity_NoMatch_FallsBackToDefault(t *testing.T) {

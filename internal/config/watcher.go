@@ -16,7 +16,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	"github.com/wys1203/keda-labs/kdw/internal/metrics"
+	"github.com/wys1203/keda-deprecation-webhook/internal/metrics"
 )
 
 // ReEnqueueAll is called after a successful CM reload so that all

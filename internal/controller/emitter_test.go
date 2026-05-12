@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"k8s.io/apimachinery/pkg/types"
 
-	"github.com/wys1203/keda-labs/kdw/internal/metrics"
+	"github.com/wys1203/keda-deprecation-webhook/internal/metrics"
 )
 
 func mkLabels(severity string) metrics.ViolationLabels {

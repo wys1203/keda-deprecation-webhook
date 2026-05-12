@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/wys1203/keda-labs/kdw/internal/rules"
+	"github.com/wys1203/keda-deprecation-webhook/internal/rules"
 )
 
 // Config is the parsed shape of the ConfigMap's `config.yaml` key.
