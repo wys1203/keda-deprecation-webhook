@@ -1,19 +1,10 @@
-{{/* Standard Helm chart name + fullname helpers */}}
+{{/* Fixed name helpers — always "keda-deprecation-webhook" regardless of release name */}}
 {{- define "keda-deprecation-webhook.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+keda-deprecation-webhook
 {{- end -}}
 
 {{- define "keda-deprecation-webhook.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
+keda-deprecation-webhook
 {{- end -}}
 
 {{- define "keda-deprecation-webhook.labels" -}}
