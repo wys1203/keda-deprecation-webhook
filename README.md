@@ -62,10 +62,22 @@ cosign verify ghcr.io/wys1203/keda-deprecation-webhook:v0.1.0 \
   --certificate-oidc-issuer 'https://token.actions.githubusercontent.com'
 ```
 
-Inspect the SBOM attached to the image:
+Inspect the BuildKit-attached SBOM and provenance:
 
 ```bash
-cosign download sbom ghcr.io/wys1203/keda-deprecation-webhook:v0.1.0
+docker buildx imagetools inspect \
+  ghcr.io/wys1203/keda-deprecation-webhook:v0.1.0 \
+  --format '{{json .SBOM}}'
+```
+
+Verify the SBOM attestation is signed by this repo's release workflow:
+
+```bash
+cosign verify-attestation \
+  --type spdxjson \
+  --certificate-identity-regexp 'https://github.com/wys1203/keda-deprecation-webhook/\.github/workflows/release\.yaml@.*' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  ghcr.io/wys1203/keda-deprecation-webhook:v0.1.0
 ```
 
 ## License
