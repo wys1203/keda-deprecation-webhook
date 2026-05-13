@@ -12,8 +12,9 @@
 #               after those workflows have at least one successful run.
 #   (default)   Phase 1.
 #
-# Status-check names map to job IDs in .github/workflows/*.yml. If those
-# IDs are renamed, update REQUIRED_CHECKS below and re-run this script.
+# Status-check names equal each workflow job's `name:` field (or the job
+# ID if `name:` is absent). If you rename a job, update REQUIRED_CHECKS
+# below and re-run this script.
 
 set -euo pipefail
 
@@ -59,7 +60,10 @@ fi
 CONTEXTS_JSON=$(printf '"%s",' "${CHECKS[@]}")
 CONTEXTS_JSON="[${CONTEXTS_JSON%,}]"
 
-cat > /tmp/branch-protection.json <<JSON
+TMPFILE=$(mktemp /tmp/branch-protection.XXXXXX.json)
+trap 'rm -f "${TMPFILE}"' EXIT
+
+cat > "${TMPFILE}" <<JSON
 {
   "required_status_checks": {
     "strict": true,
@@ -77,8 +81,7 @@ cat > /tmp/branch-protection.json <<JSON
 JSON
 
 gh api -X PUT "repos/${OWNER}/${REPO}/branches/${BRANCH}/protection" \
-  --input /tmp/branch-protection.json > /dev/null
-rm -f /tmp/branch-protection.json
+  --input "${TMPFILE}" > /dev/null
 echo "    ok"
 
 echo "==> Done"
