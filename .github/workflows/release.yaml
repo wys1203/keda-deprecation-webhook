@@ -44,7 +44,6 @@ jobs:
       - name: Sign image with Cosign (keyless)
         env:
           DIGEST: ${{ steps.build.outputs.digest }}
-          COSIGN_EXPERIMENTAL: "1"
         run: |
           cosign sign --yes \
             "ghcr.io/wys1203/keda-deprecation-webhook@${DIGEST}"
