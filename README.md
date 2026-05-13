@@ -1,5 +1,7 @@
 # keda-deprecation-webhook
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/wys1203/keda-deprecation-webhook/badge)](https://scorecard.dev/viewer/?uri=github.com/wys1203/keda-deprecation-webhook)
+
 A Kubernetes validating admission webhook that flags deprecated fields in
 KEDA `ScaledObject` and `ScaledJob` resources. Configurable per-rule
 severity (error / warn / off) with namespace-level overrides.
@@ -46,6 +48,24 @@ See [`charts/keda-deprecation-webhook/values.yaml`](charts/keda-deprecation-webh
 go test ./...
 helm lint charts/keda-deprecation-webhook
 ./hack/chart-vs-manifests-diff.sh   # against the old manifests/, kept for parity
+```
+
+## Verify the image
+
+Released images are signed with [Sigstore Cosign](https://www.sigstore.dev/)
+keyless OIDC and ship with SLSA provenance and an SPDX SBOM. Verify before
+pulling into production:
+
+```bash
+cosign verify ghcr.io/wys1203/keda-deprecation-webhook:v0.1.0 \
+  --certificate-identity-regexp 'https://github.com/wys1203/keda-deprecation-webhook/\.github/workflows/release\.yaml@.*' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com'
+```
+
+Inspect the SBOM attached to the image:
+
+```bash
+cosign download sbom ghcr.io/wys1203/keda-deprecation-webhook:v0.1.0
 ```
 
 ## License
