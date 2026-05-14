@@ -1494,3 +1494,24 @@ After all tasks complete:
 4. **Maintenance script idempotent**: second run reports 0 changes (Task 9.2).
 5. **Documentation in place**: SKILL.md, known-bugs.md, plus per-repo spec/plan templates (Tasks 7, 8, 6).
 6. **Integration not yet run on another repo**: deferred — first real invocation will be from a target repo by the user. The plan does not auto-invoke the skill on a second repo; that's a separate decision.
+
+---
+
+## Implementation completed: 2026-05-14
+
+**Skill installed at:** `~/.claude/skills/harden-public-oss/` (14 files).
+
+**Tests passed:**
+- `detect.sh` against current repo: image=true, chart=true, ci_jobs=[go,chart,image], existing=7, managed=[], already_full=false.
+- `resolve-action-shas.sh ossf/scorecard-action v2.4.0` → `62b2cac...` (commit), not `ff5dd89...` (tag object).
+- `update-skill-shas.sh` idempotent (second run reports 0 changed).
+- All lint clean: actionlint on 4 workflows + release.yaml, shellcheck on 3 scripts + hack template, YAML parse on dependabot.yml.
+
+**Real bugs caught and fixed during implementation:**
+1. `detect.sh` originally panicked under `set -u` on empty arrays — added length guards. Also tightened DX (up-front tool-dependency checks, useful gh error message, `jq -n` for safe JSON emission, drop hardcoded "7" in comment).
+2. `update-skill-shas.sh` `ver_ge` had inverted comparison logic (`printf '$1\n$2' | sort -V -C` exits 0 only when ascending, i.e. when `$1 <= $2`). Swapped to `printf '$2\n$1'` so it correctly returns 0 iff `$1 >= $2`. The codeql ≥ v3.35.0 guard now works correctly.
+3. macOS bash 3.2 doesn't support `declare -A`. `update-skill-shas.sh` rewritten to use tempdir-backed file mappings + sorted-unique text file for unique pairs. Behavior unchanged.
+
+**First real-world target candidates:** any other Go + container-image public repo owned by `wys1203`. From the target repo root, invoke the `harden-public-oss` skill (auto-discovered by Claude Code from `~/.claude/skills/`).
+
+**Maintenance cadence:** Run `~/.claude/skills/harden-public-oss/scripts/update-skill-shas.sh` quarterly or on upstream security advisories; review the diff before keeping it. The minimum-version guard table inside that script is the place to record future known-bad version ranges.
